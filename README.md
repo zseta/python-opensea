@@ -1,4 +1,4 @@
-# Python 3 wrapper for the OpenSea NFT API
+# OpenSea NFT API Python 3 wrapper
 This an API wrapper library for the [OpenSea API](https://docs.opensea.io/reference/api-overview) written in Python 3.
 
 The library provides a simplified interface to fetch a diverse set of NFT data points from OpenSea. 
@@ -73,7 +73,7 @@ print(api.fetch(asset_owner="0xce90a7949bb78892f159f428d0dc23a8e3584d75",
      
 ### Get data about multiple events
 This example creates a JSON file with 10 events that happened between the defined time period (UTC timezone)
-between 2021-11-06 14:25 and 2021-11-06 14:30
+between `2021-11-06 14:25` and `2021-11-06 14:30`
 ```python
 from opensea import Events
 from opensea import utils
@@ -82,6 +82,7 @@ period_start = utils.datetime_utc(2021, 11, 6, 14, 25)
 period_end = utils.datetime_utc(2021, 11, 6, 14, 30)
 print(api.fetch(occurred_after=period_start,
                 occurred_before=period_end,
+                limit=10,
                 export_file_name='events.json'))
 ```
 

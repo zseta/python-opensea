@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime
-import utils
+from opensea import utils
 
 class OpenseaBase():
     

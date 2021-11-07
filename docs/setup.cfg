@@ -1,4 +1,0 @@
-[options.extras_require]
-docs =
-    sphinx
-    myst-parser

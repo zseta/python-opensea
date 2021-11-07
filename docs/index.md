@@ -6,11 +6,3 @@ readme
 contributing
 history
 ```
-
-
-
-## Indices and tables
-
-* [Index](genindex)
-* [index2](modindex)
-* [search](search)

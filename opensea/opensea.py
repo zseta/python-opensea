@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime
-from . import utils
+import utils
 
 class OpenseaBase():
     
@@ -35,6 +35,8 @@ class OpenseaBase():
         response = requests.get(self.api_url, params=params)
         if response.status_code == 400:
             raise ValueError(response.text)
+        elif response.status_code == 504:
+            raise TimeoutError("The web server reported a gateway time-out error.")
         if export_file_name != '':
             utils.export_file(response.content, export_file_name)
         if return_response:
@@ -96,7 +98,7 @@ class Asset(OpenseaBase):
         
         Args:
             asset_contract_address (str)
-            token_id (int):
+            token_id (str):
         """
         super().__init__(endpoint=f"asset/{asset_contract_address}/{token_id}")
     
@@ -162,6 +164,8 @@ class Contract(OpenseaBase):
     def fetch(self, export_file_name=''):
         """Fetches asset contract data from the API.
         
+        OpenSea API Asset Contract query parameters: https://docs.opensea.io/reference/retrieving-a-single-contract
+        
         Args:
             export_file_name (str, optional): Exports the JSON data into a the specified file.
 
@@ -182,6 +186,8 @@ class Collection(OpenseaBase):
         
     def fetch(self, export_file_name=''):
         """Fetches collection data from the API.
+        
+        OpenSea API Collection query parameters: https://docs.opensea.io/reference/retrieving-a-single-collection
 
         Args:
             export_file_name (str, optional): Exports the JSON data into a the specified file.
@@ -204,12 +210,14 @@ class CollectionStats(OpenseaBase):
         
     def fetch(self, export_file_name=''):
         """Fetches collection stats data from the API.
+        
+        OpenSea API Collection Stats query parameters: https://docs.opensea.io/reference/retrieving-collection-stats
 
         Args:
             export_file_name (str, optional): Exports the JSON data into the specified file.
 
         Returns:
-            [type]: [description]
+            [dict]: Collection stats
         """
         return super()._make_request(None, export_file_name)
 
@@ -228,7 +236,7 @@ class Collections(OpenseaBase):
         """Fetches Collections data from the API. Function arguments will be passed as API query parameters, 
         without modification.
         
-        OpenSea API Assets query parameters: https://docs.opensea.io/reference/retrieving-collections
+        OpenSea API Collections query parameters: https://docs.opensea.io/reference/retrieving-collections
         
         There's one extra optional argument:
         export_file_name (str, optional): Exports the JSON data into a the specified file.
@@ -254,7 +262,7 @@ class Bundles(OpenseaBase):
         """Fetches Bundles data from the API. Function arguments will be passed as API query parameters, 
         without modification.
         
-        OpenSea API Assets query parameters: https://docs.opensea.io/reference/retrieving-bundles
+        OpenSea API Bundles query parameters: https://docs.opensea.io/reference/retrieving-bundles
         
         There's one extra optional argument:
         export_file_name (str, optional): Exports the JSON data into a the specified file.

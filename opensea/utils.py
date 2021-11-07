@@ -1,10 +1,24 @@
 from datetime import datetime, timezone
 
 def export_file(content, file_name):
+    """Creates a new file with the specified content and file name. If the file already exists, overwrites it.
+
+    Args:
+        content (str or bytes): Content to be inserted into the file.
+        file_name (str): Name of the file to be created. Eg. 'export.json'.
+    """
     with open(file_name, 'wb') as f:
         f.write(content)
         
 def str_to_datetime_utc(str):
+    """Converts a string into UTC datetime object.
+
+    Args:
+        str (str): String timestamp.
+
+    Returns:
+        datetime: Datetime object.
+    """
     return datetime.fromisoformat(str).replace(tzinfo=timezone.utc)
 
 def datetime_utc(year, month, day, hour, minute):

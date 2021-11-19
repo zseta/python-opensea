@@ -53,7 +53,7 @@ setup(
     url='https://github.com/zseta/python-opensea',
     project_urls={
         'Documentation': 'https://opensea-api.attilatoth.dev',
-        'Source': 'https://github.com/zseta/opensea'
+        'Source': 'https://github.com/zseta/python-opensea'
     },
     version='0.1.2',
     zip_safe=False,

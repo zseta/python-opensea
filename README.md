@@ -4,7 +4,7 @@ This an API wrapper library for the [OpenSea API](https://docs.opensea.io/refere
 The library provides a simplified interface to fetch a diverse set of NFT data points from OpenSea. 
 
 ## Supported endpoints
-The wrapper covers **all** of the OpenSea API endpoints (as of 2021-10-07, NOT including the Orderbook and Rinkeby API):
+The wrapper covers **all** of the OpenSea API endpoints (as of 2021-12-02, NOT including the Orderbook and Rinkeby API):
 
 * Single asset ([/asset](https://docs.opensea.io/reference/retrieving-a-single-asset))
 * Single asset contract ([/asset_contract](https://docs.opensea.io/reference/retrieving-a-single-contract))
@@ -18,10 +18,14 @@ The wrapper covers **all** of the OpenSea API endpoints (as of 2021-10-07, NOT i
 ## Installation
 Install with pip:
 ```bash
+virtualenv env && source env/bin/activate
 pip install opensea-api
 ```
 
 ## Usage
+
+As of Dec 2, 2021 you need to have an API key to use the OpenSea API, and thus 
+this you need one to use this wrapper too. [You can request a key here.](https://docs.opensea.io/reference/request-an-api-key)
 
 ### Get data about a single asset
 ```python

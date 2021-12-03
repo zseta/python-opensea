@@ -6,18 +6,18 @@ The library provides a simplified interface to fetch a diverse set of NFT data p
 ## Supported endpoints
 The wrapper covers **all** of the OpenSea API endpoints (as of 2021-12-02, NOT including the Orderbook and Rinkeby API):
 
-* [Single asset](###get-data-about-a-single-asset) ([/asset](https://docs.opensea.io/reference/retrieving-a-single-asset))
-* [Single asset contract](###get-data-about-a-single-asset-contract) ([/asset_contract](https://docs.opensea.io/reference/retrieving-a-single-contract))
-* [Single collection](###Get-data-about-a-single-collection) ([/collection](https://docs.opensea.io/reference/retrieving-a-single-collection))
-* [Collection stats](###Get-collection-stats) ([/collection/{slug}/stats](https://docs.opensea.io/reference/retrieving-collection-stats))
-* [Multiple assets](###Get-data-about-multiple-assets) ([/assets](https://docs.opensea.io/reference/getting-assets))
-* [Multiple collections](###Get-data-about-multiple-collections) ([/collections](https://docs.opensea.io/reference/retrieving-collections))
-* [Multiple events](###Get-data-about-multiple-events) ([/events](https://docs.opensea.io/reference/retrieving-asset-events))
-* [Multiple bundles](###Get-data-about-multiple-bundles) ([/bundles](https://docs.opensea.io/reference/retrieving-bundles))
+* [Single asset](#get-data-about-a-single-asset) ([/asset](https://docs.opensea.io/reference/retrieving-a-single-asset))
+* [Single asset contract](#get-data-about-a-single-asset-contract) ([/asset_contract](https://docs.opensea.io/reference/retrieving-a-single-contract))
+* [Single collection](#get-data-about-a-single-collection) ([/collection](https://docs.opensea.io/reference/retrieving-a-single-collection))
+* [Collection stats](#get-collection-stats) ([/collection/{slug}/stats](https://docs.opensea.io/reference/retrieving-collection-stats))
+* [Multiple assets](#get-data-about-multiple-assets) ([/assets](https://docs.opensea.io/reference/getting-assets))
+* [Multiple collections](#get-data-about-multiple-collections) ([/collections](https://docs.opensea.io/reference/retrieving-collections))
+* [Multiple events](#get-data-about-multiple-events) ([/events](https://docs.opensea.io/reference/retrieving-asset-events))
+* [Multiple bundles](#get-data-about-multiple-bundles) ([/bundles](https://docs.opensea.io/reference/retrieving-bundles))
 
 
 ## Prerequisite
-As of Dec 2, 2021 you need to have an API key to use the OpenSea API, and thus 
+As of Dec 2, 2021 you need to have an **API key** to use the OpenSea API, and thus 
 you need one to use this wrapper too. [You can request a key here.](https://docs.opensea.io/reference/request-an-api-key)
 
 ## Installation

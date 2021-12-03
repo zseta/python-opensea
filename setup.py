@@ -47,7 +47,7 @@ setup(
     maintainer='Attila Toth',
     maintainer_email='hello@attilatoth.dev',
     name='opensea-api',
-    packages=find_packages(include=['opensea', 'opensea.*']),
+    packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/zseta/python-opensea',

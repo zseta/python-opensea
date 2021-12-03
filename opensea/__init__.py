@@ -2,9 +2,12 @@
 
 __author__ = """Attila Toth"""
 __email__ = "hello@attilatoth.dev"
-__version__ = "__version__ = '0.1.2'"
+__version__ = '0.1.3'
 __all__ = ["Events", "Asset", "Assets", "Contract", "Collection",
-           "CollectionStats", "Collections", "Bundles"]
+           "CollectionStats", "Collections", "Bundles", "utils",
+           "OpenseaAPI"]
 
 from opensea.opensea import Events, Asset, Assets, Contract, Collection, \
     CollectionStats, Collections, Bundles
+from opensea.opensea_api import OpenseaAPI
+from opensea import utils

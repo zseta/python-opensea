@@ -43,18 +43,18 @@ setup(
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/markdown",
     include_package_data=True,
-    keywords='opensea',
+    keywords=['opensea', 'nft', 'non fungible token', 'crypto'],
     maintainer='Attila Toth',
     maintainer_email='hello@attilatoth.dev',
     name='opensea-api',
-    packages=find_packages(include=['opensea', 'opensea.*']),
+    packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/zseta/python-opensea',
     project_urls={
         'Documentation': 'https://opensea-api.attilatoth.dev',
-        'Source': 'https://github.com/zseta/opensea'
+        'Source': 'https://github.com/zseta/python-opensea'
     },
-    version='0.1.2',
+    version='0.1.3',
     zip_safe=False,
 )

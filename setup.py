@@ -43,7 +43,7 @@ setup(
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/markdown",
     include_package_data=True,
-    keywords='opensea',
+    keywords=['opensea', 'nft', 'non fungible token', 'crypto'],
     maintainer='Attila Toth',
     maintainer_email='hello@attilatoth.dev',
     name='opensea-api',

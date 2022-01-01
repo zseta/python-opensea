@@ -72,6 +72,8 @@ result = api.events(
 result = api.bundles(limit=2)
 ```
 
+[Here's a demo video showcasing the basics.](https://www.youtube.com/watch?v=ga4hTqNRjfw)
+
 ## Documentation
 * [Wrapper documentation](https://opensea-api.attilatoth.dev) (work in progress)
 * [OpenSea API documentation](https://docs.opensea.io/reference/api-overview)

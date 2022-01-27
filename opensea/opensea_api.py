@@ -5,20 +5,19 @@ from opensea import utils
 
 class OpenseaAPI:
 
-    BASE_API_URL = "https://api.opensea.io/api"
     MAX_EVENT_ITEMS = 300
     MAX_ASSET_ITEMS = 50
     MAX_COLLECTION_ITEMS = 300
     MAX_BUNDLE_ITEMS = 50
 
-    def __init__(self, apikey=None, version="v1"):
+    def __init__(self, base_url="https://api.opensea.io/api", apikey=None, version="v1"):
         """Base class to interact with the OpenSea API and fetch NFT data.
 
         Args:
             apikey (str): OpenSea API key (you need to request one)
             version (str, optional): API version. Defaults to "v1".
         """
-        self.api_url = f"{self.BASE_API_URL}/{version}"
+        self.api_url = f"{base_url}/{version}"
         self.apikey = apikey
 
     def _make_request(

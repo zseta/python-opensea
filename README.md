@@ -18,7 +18,7 @@ The wrapper covers **all** of the OpenSea API endpoints (as of 2021-12-02, NOT i
 
 ## Prerequisite
 As of Dec 2, 2021 you need to have an **API key** to use the OpenSea API, and thus 
-you need one to use this wrapper too. [You can request a key here.](https://docs.opensea.io/reference/request-an-api-key)
+you need one to use this wrapper too. [You can request a key here.](https://docs.opensea.io/reference/request-an-api-key). The API key can take over 4-7 days to recieve and requires you to show the project you are working on. 
 
 ## Installation
 Install with pip:

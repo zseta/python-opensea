@@ -10,12 +10,15 @@ class OpenseaAPI:
     MAX_COLLECTION_ITEMS = 300
     MAX_BUNDLE_ITEMS = 50
 
-    def __init__(self, base_url="https://api.opensea.io/api", apikey=None, version="v1"):
+    PROD_BASE_URL = "https://api.opensea.io/api"
+    TEST_BASE_URL = "https://testnets-api.opensea.io/api"
+
+    def __init__(self, base_url=PROD_BASE_URL, version="v1", apikey=None):
         """Base class to interact with the OpenSea API and fetch NFT data.
 
         Args:
-            apikey (str): OpenSea API key (you need to request one)
             version (str, optional): API version. Defaults to "v1".
+            apikey (str): OpenSea API key (you need to request one)
         """
         self.api_url = f"{base_url}/{version}"
         self.apikey = apikey

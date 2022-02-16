@@ -5,12 +5,14 @@ from opensea import utils
 
 class OpenseaBase:
 
-    def __init__(self, endpoint, version="v1", base_url="https://api.opensea.io/api"):
+    def __init__(self, endpoint, version="v1",
+                 base_url="https://api.opensea.io/api"):
         """Base class to interact with the OpenSea API and fetch NFT data.
 
         Args:
             endpoint (str): OpenSea API endpoint, eg. 'asset' or 'collections'
-            version (str, optional): API version. Defaults to "v1".
+            version (str, optional): API version. Defaults to "v1"
+            base
         """
         self.api_url = f"{base_url}/{version}/{endpoint}"
 

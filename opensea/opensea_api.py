@@ -10,10 +10,13 @@ class OpenseaAPI:
     MAX_COLLECTION_ITEMS = 300
     MAX_BUNDLE_ITEMS = 50
 
-    def __init__(self, base_url="https://api.opensea.io/api", apikey=None, version="v1"):
+    def __init__(self, base_url="https://api.opensea.io/api", apikey=None,
+                 version="v1"):
         """Base class to interact with the OpenSea API and fetch NFT data.
 
         Args:
+            base_url (str): OpenSea API base URL. Defaults to
+            "https://api.opensea.io/api".
             apikey (str): OpenSea API key (you need to request one)
             version (str, optional): API version. Defaults to "v1".
         """
@@ -54,6 +57,8 @@ class OpenseaAPI:
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 400:
             raise ValueError(response.text)
+        elif response.status_code == 401:
+            raise requests.exceptions.HTTPError(response.text)
         elif response.status_code == 403:
             raise ConnectionError("The server blocked access.")
         elif response.status_code == 504:
@@ -74,10 +79,8 @@ class OpenseaAPI:
         event_type=None,
         only_opensea=False,
         auction_type=None,
-        offset=0,
         limit=None,
         occurred_before=None,
-        occurred_after=None,
         export_file_name="",
     ):
         """Fetches Events data from the API. Function arguments will be passed
@@ -97,10 +100,6 @@ class OpenseaAPI:
         Returns:
             [dict]: Events data
         """
-        if occurred_after is not None and not isinstance(occurred_after,
-                                                         datetime):
-            raise ValueError("occurred_after must be a datetime object")
-
         if occurred_before is not None and not isinstance(occurred_before,
                                                           datetime):
             raise ValueError("occurred_before must be a datetime object")
@@ -113,13 +112,10 @@ class OpenseaAPI:
             "event_type": event_type,
             "only_opensea": only_opensea,
             "auction_type": auction_type,
-            "offset": offset,
             "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
         }
         if occurred_before is not None:
             query_params["occurred_before"] = occurred_before.timestamp()
-        if occurred_after is not None:
-            query_params["occurred_after"] = occurred_after.timestamp()
         return self._make_request("events", query_params, export_file_name)
 
     def asset(

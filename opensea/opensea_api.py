@@ -78,10 +78,8 @@ class OpenseaAPI:
         event_type=None,
         only_opensea=False,
         auction_type=None,
-        offset=0,
         limit=None,
         occurred_before=None,
-        occurred_after=None,
         export_file_name="",
     ):
         """Fetches Events data from the API. Function arguments will be passed
@@ -101,10 +99,6 @@ class OpenseaAPI:
         Returns:
             [dict]: Events data
         """
-        if occurred_after is not None and not isinstance(occurred_after,
-                                                         datetime):
-            raise ValueError("occurred_after must be a datetime object")
-
         if occurred_before is not None and not isinstance(occurred_before,
                                                           datetime):
             raise ValueError("occurred_before must be a datetime object")
@@ -117,14 +111,10 @@ class OpenseaAPI:
             "event_type": event_type,
             "only_opensea": only_opensea,
             "auction_type": auction_type,
-            "offset": offset,
             "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
         }
         if occurred_before is not None:
             query_params["occurred_before"] = occurred_before.timestamp()
-        if occurred_after is not None:
-            query_params["occurred_after"] = occurred_after.timestamp()
-        return self._make_request("events", query_params, export_file_name)
 
     def asset(
         self,

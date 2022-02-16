@@ -15,7 +15,8 @@ class OpenseaAPI:
         """Base class to interact with the OpenSea API and fetch NFT data.
 
         Args:
-            base_url (str): OpenSea API base URL. Defaults to "https://api.opensea.io/api".
+            base_url (str): OpenSea API base URL. Defaults to
+            "https://api.opensea.io/api".
             apikey (str): OpenSea API key (you need to request one)
             version (str, optional): API version. Defaults to "v1".
         """
@@ -62,7 +63,7 @@ class OpenseaAPI:
             raise ConnectionError("The server blocked access.")
         elif response.status_code == 504:
             raise TimeoutError("The server reported a gateway time-out error.")
-        
+
         if export_file_name != "":
             utils.export_file(response.content, export_file_name)
         if return_response:

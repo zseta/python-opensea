@@ -115,6 +115,7 @@ class OpenseaAPI:
         }
         if occurred_before is not None:
             query_params["occurred_before"] = occurred_before.timestamp()
+        return self._make_request("events", query_params, export_file_name)
 
     def asset(
         self,

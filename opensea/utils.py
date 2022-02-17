@@ -42,9 +42,9 @@ def datetime_utc(year, month, day, hour, minute):
 
 
 def next_url_fix(next_url):
-    """A temporary solution to make cursor-based pagination work 
+    """A temporary solution to make cursor-based pagination work
     with next URLs. This can ignored after OpenSea fixes the next URL.
-    As of 2022-02-17 the cursor-based pagination does not work 
+    As of 2022-02-17 the cursor-based pagination does not work
     without fixing the URL first.
 
     Args:

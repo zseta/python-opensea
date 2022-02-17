@@ -131,9 +131,9 @@ class OpenseaAPI:
                         rate_limiting=2):
         """
         EXPERIMENTAL FUNCTION!
-        
+
         Expected behaviour:
-        
+
         Download events and paginate over multiple pages until the given
         time is reached. You need to make a regular `/events` request first to
         use this function - to get the `next` value. The function returns a

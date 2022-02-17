@@ -2,7 +2,8 @@
 
 ## 0.1.5 (2021-02-17)
 
-* Support for cursor-based pagination for /events endpoint
+* Ability to override base_url with any other URL
+* Support for cursor-based pagination for /events endpoint (and removed deprecated arguments)
 * New function to help paginate the /events endpoint
 * Introducing a temporary function to fix the `next` url problem until OpenSea addresses this issue
 * Minor docs updates and cleanup

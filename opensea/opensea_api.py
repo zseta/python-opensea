@@ -129,7 +129,12 @@ class OpenseaAPI:
 
     def events_backfill(self, until, next_url, export_file_name="",
                         rate_limiting=2):
-        """Download events and paginate over multiple pages until the given
+        """
+        EXPERIMENTAL FUNCTION!
+        
+        Expected behaviour:
+        
+        Download events and paginate over multiple pages until the given
         time is reached. You need to make a regular `/events` request first to
         use this function - to get the `next` value. The function returns a
         generator.

@@ -4,7 +4,7 @@ This an API wrapper library for the [OpenSea API](https://docs.opensea.io/refere
 The library provides a simplified interface to fetch a diverse set of NFT data points from OpenSea. 
 
 ## Supported endpoints
-The wrapper covers **all** of the OpenSea API endpoints (as of 2021-12-02, NOT including the Orderbook and Rinkeby API):
+The wrapper covers the following OpenSea API endpoints:
 
 * [Single asset](#get-data-about-a-single-asset) ([/asset](https://docs.opensea.io/reference/retrieving-a-single-asset))
 * [Single asset contract](#get-data-about-a-single-asset-contract) ([/asset_contract](https://docs.opensea.io/reference/retrieving-a-single-contract))
@@ -17,7 +17,7 @@ The wrapper covers **all** of the OpenSea API endpoints (as of 2021-12-02, NOT i
 
 
 ## Prerequisite
-As of Dec 2, 2021 you need to have an **API key** to use the OpenSea API, and thus 
+You need to have an **API key** to use the OpenSea API, and thus
 you need one to use this wrapper too. [You can request a key here.](https://docs.opensea.io/reference/request-an-api-key) <br><br>
 NOTE: The API key can take over 4-7 days to be delivered. It also requires you to show the project you are working on. 
 
@@ -26,6 +26,11 @@ Install with pip:
 ```bash
 virtualenv env && source env/bin/activate
 pip install opensea-api
+```
+
+### Upgrade
+```bash
+pip install opensea-api -U
 ```
 
 ## Usage examples
@@ -60,10 +65,8 @@ result = api.collection_stats(collection_slug="cryptopunks")
 # fetch multiple events
 from opensea import utils as opensea_utils
 
-period_start = opensea_utils.datetime_utc(2021, 11, 6, 14, 25)
 period_end = opensea_utils.datetime_utc(2021, 11, 6, 14, 30)
 result = api.events(
-    occurred_after=period_start,
     occurred_before=period_end,
     limit=10,
     export_file_name="events.json",

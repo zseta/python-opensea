@@ -1,3 +1,4 @@
+import time
 import requests
 from datetime import datetime
 from opensea import utils
@@ -24,13 +25,13 @@ class OpenseaAPI:
         self.apikey = apikey
 
     def _make_request(
-        self, endpoint, params=None, export_file_name="", return_response=False
-    ):
+        self, endpoint=None, params=None, export_file_name="",
+        return_response=False, next_url=None):
         """Makes a request to the OpenSea API and returns either a response
         object or dictionary.
 
         Args:
-            endpoint (str): API endpoint to use for the request.
+            endpoint (str, optional): API endpoint to use for the request.
             params (dict, optional): Query parameters to include in the
             request. Defaults to None.
             export_file_name (str, optional): In case you want to download the
@@ -40,20 +41,28 @@ class OpenseaAPI:
             return_response (bool, optional): Set it True if you want it to
             return the actual response object.
             By default, it's False, which means a dictionary will be returned.
+            next_url (str, optional): If you want to paginate, provide the
+            `next` value here (this is a URL) OpenSea provides in the response.
+            If this argument is provided, `endpoint` will be ignored.
 
         Raises:
             ValueError: returns the error message from the API in case one
             (or more) of your request parameters are incorrect.
+            HTTPError: Unauthorized access. Try using an API key.
             ConnectionError: your request got blocked by the server (try
             using an API key if you keep getting this error)
             TimeoutError: your request timed out (try rate limiting)
 
         Returns:
             Data sent back from the API. Either a response or dict object
-            depending on the *return_response* argument.
+            depending on the `return_response` argument.
         """
+        if endpoint is None and next_url is None:
+            raise ValueError("""You need to define either `endpoint` or
+                             `next_url` as an argument!""")
+
         headers = {"X-API-KEY": self.apikey}
-        url = f"{self.api_url}/{endpoint}"
+        url = next_url if endpoint is None else f"{self.api_url}/{endpoint}"
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 400:
             raise ValueError(response.text)
@@ -117,6 +126,52 @@ class OpenseaAPI:
         if occurred_before is not None:
             query_params["occurred_before"] = occurred_before.timestamp()
         return self._make_request("events", query_params, export_file_name)
+
+    def events_backfill(self, until, next_url, export_file_name="",
+                        rate_limiting=2):
+        """
+        EXPERIMENTAL FUNCTION!
+
+        Expected behaviour:
+
+        Download events and paginate over multiple pages until the given
+        time is reached. You need to make a regular `/events` request first to
+        use this function - to get the `next` value. The function returns a
+        generator.
+
+        Args:
+            until (datetime): How much data do you want?
+            How much do you want to go back in time? This datetime value will
+            provide that threshold.
+            next_url (str): This is the `next` value provided in the response
+            object returned by the API. (Meaning, you need to make a regular
+            `/events` request first to have this value)
+            export_file_name (str, optional): Exports the JSON data into a the
+            specified file.
+            rate_limiting (int, optional): Seconds to wait between requests.
+            Defaults to 2.
+
+        Yields:
+            dictionary: event data
+        """
+        if not isinstance(until, datetime):
+            raise ValueError("`until` must be a datetime object")
+        while True:
+            time.sleep(rate_limiting)
+            data = self._make_request(next_url=next_url,
+                                      export_file_name=export_file_name)
+
+            # temporary url fix
+            # normally you would use `next_url = data["next"]`
+            next_url = utils.next_url_fix(data["next"])
+
+            time_field = data["asset_events"][0]["created_date"]
+            current_time = utils.str_to_datetime_utc(time_field)
+            if current_time >= until:
+                yield data
+            else:
+                break
+        yield None
 
     def asset(
         self,

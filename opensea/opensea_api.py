@@ -26,7 +26,7 @@ class OpenseaAPI:
 
     def _make_request(
         self, endpoint=None, params=None, export_file_name="",
-        return_response=False, next_url=None):
+        return_response=False):
         """Makes a request to the OpenSea API and returns either a response
         object or dictionary.
 
@@ -57,12 +57,12 @@ class OpenseaAPI:
             Data sent back from the API. Either a response or dict object
             depending on the `return_response` argument.
         """
-        if endpoint is None and next_url is None:
-            raise ValueError("""You need to define either `endpoint` or
-                             `next_url` as an argument!""")
+        if endpoint is None:
+            raise ValueError("""You need to define an `endpoint` when
+                             making a request!""")
 
         headers = {"X-API-KEY": self.apikey}
-        url = next_url if endpoint is None else f"{self.api_url}/{endpoint}"
+        url = f"{self.api_url}/{endpoint}"
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 400:
             raise ValueError(response.text)
@@ -127,43 +127,77 @@ class OpenseaAPI:
             query_params["occurred_before"] = occurred_before.timestamp()
         return self._make_request("events", query_params, export_file_name)
 
-    def events_backfill(self, until, next_url, export_file_name="",
-                        rate_limiting=2):
+    def events_backfill(self,
+                        start,
+                        until,
+                        rate_limiting=2,
+                        asset_contract_address=None,
+                        collection_slug=None,
+                        token_id=None,
+                        account_address=None,
+                        event_type=None,
+                        only_opensea=False,
+                        auction_type=None,
+                        limit=None
+                        ):
         """
         EXPERIMENTAL FUNCTION!
 
         Expected behaviour:
 
         Download events and paginate over multiple pages until the given
-        time is reached. You need to make a regular `/events` request first to
-        use this function - to get the `next` value. The function returns a
-        generator.
+        time is reached. Pagination happens **backwards** (so you can use this
+        function to **backfill** events data eg. into a database) from `start`
+        until `until`.
+        
+        The function returns a generator.
 
         Args:
+            start (datetime): A point in time where you want to start
+            downloading data from.
             until (datetime): How much data do you want?
             How much do you want to go back in time? This datetime value will
             provide that threshold.
-            next_url (str): This is the `next` value provided in the response
-            object returned by the API. (Meaning, you need to make a regular
-            `/events` request first to have this value)
-            export_file_name (str, optional): Exports the JSON data into a the
-            specified file.
             rate_limiting (int, optional): Seconds to wait between requests.
             Defaults to 2.
+
+            Other parameters are available (all of the `events` endpoint
+            parameters) and they are documented in the OpenSea docs
+            https://docs.opensea.io/reference/retrieving-asset-events
 
         Yields:
             dictionary: event data
         """
-        if not isinstance(until, datetime):
-            raise ValueError("`until` must be a datetime object")
+        if not isinstance(until, datetime) or not isinstance(start, datetime):
+            raise ValueError("`until` and `start` must be datetime objects")
+        
+        if until > start:
+            raise ValueError("""`start` must be a later point in time
+                             than `until`""")
+
+        query_params = {
+            "asset_contract_address": asset_contract_address,
+            "collection_slug": collection_slug,
+            "token_id": token_id,
+            "account_address": account_address,
+            "event_type": event_type,
+            "only_opensea": only_opensea,
+            "auction_type": auction_type,
+            "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
+        }
+
+        # make the first request to get the `next` cursor has
+        first_request = self._make_request("events", query_params)
+        yield first_request
+        query_params["cursor"] = first_request["next"]
+
+        # pagination
         while True:
             time.sleep(rate_limiting)
-            data = self._make_request(next_url=next_url,
-                                      export_file_name=export_file_name)
+            data = self._make_request("events", query_params)
 
-            # temporary url fix
-            # normally you would use `next_url = data["next"]`
-            next_url = utils.next_url_fix(data["next"])
+            # update the `next` parameter for the upcoming request
+            query_params["cursor"] = data["next"]
 
             time_field = data["asset_events"][0]["created_date"]
             current_time = utils.str_to_datetime_utc(time_field)

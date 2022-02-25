@@ -149,7 +149,7 @@ class OpenseaAPI:
         time is reached. Pagination happens **backwards** (so you can use this
         function to **backfill** events data eg. into a database) from `start`
         until `until`.
-        
+
         The function returns a generator.
 
         Args:
@@ -170,7 +170,7 @@ class OpenseaAPI:
         """
         if not isinstance(until, datetime) or not isinstance(start, datetime):
             raise ValueError("`until` and `start` must be datetime objects")
-        
+
         if until > start:
             raise ValueError("""`start` must be a later point in time
                              than `until`""")

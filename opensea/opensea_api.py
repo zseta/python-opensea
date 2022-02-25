@@ -184,6 +184,7 @@ class OpenseaAPI:
             "only_opensea": only_opensea,
             "auction_type": auction_type,
             "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
+            "occurred_before": start
         }
 
         # make the first request to get the `next` cursor has

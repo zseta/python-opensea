@@ -1,6 +1,10 @@
 # History
 
-## 0.1.5 (2021-02-17)
+## 0.1.6 (2022-02-25)
+* Fix /events endpoint pagination (`events_backfill()` function) by
+passing only *the cursor hash* and not the full URL to the next request.
+
+## 0.1.5 (2022-02-17)
 
 * Ability to override base_url with any other URL
 * Support for cursor-based pagination for /events endpoint (and removed deprecated arguments)

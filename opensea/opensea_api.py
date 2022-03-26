@@ -70,6 +70,8 @@ class OpenseaAPI:
             raise requests.exceptions.HTTPError(response.text)
         elif response.status_code == 403:
             raise ConnectionError("The server blocked access.")
+        elif response.status_code == 495:
+            raise requests.exceptions.SSLError("SSL certificate error")
         elif response.status_code == 504:
             raise TimeoutError("The server reported a gateway time-out error.")
 

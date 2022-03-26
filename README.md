@@ -83,7 +83,7 @@ from datetime import datetime, timezone
 start_at = datetime(2021, 10, 5, 3, 25, tzinfo=timezone.utc)
 finish_at = datetime(2021, 10, 5, 3, 20, tzinfo=timezone.utc)
 
-event_generator = api.events_backfill(start=start_from,
+event_generator = api.events_backfill(start=start_at,
                                       until=finish_at,
                                       event_type="successful")
 for event in event_generator:

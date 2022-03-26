@@ -150,7 +150,8 @@ class OpenseaAPI:
                         event_type=None,
                         only_opensea=False,
                         auction_type=None,
-                        limit=None
+                        limit=None,
+                        collection_editor=None
                         ):
         """
         EXPERIMENTAL FUNCTION!
@@ -196,7 +197,8 @@ class OpenseaAPI:
             "only_opensea": only_opensea,
             "auction_type": auction_type,
             "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
-            "occurred_before": start
+            "occurred_before": start,
+            "collection_editor": collection_editor
         }
 
         # make the first request to get the `next` cursor has

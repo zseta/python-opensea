@@ -14,6 +14,8 @@ The wrapper covers the following OpenSea API endpoints:
 * Multiple collections ([/collections](https://docs.opensea.io/reference/retrieving-collections))
 * Multiple events ([/events](https://docs.opensea.io/reference/retrieving-asset-events))
 * Multiple bundles ([/bundles](https://docs.opensea.io/reference/retrieving-bundles))
+* Asset listings ([/asset/{asset_contract_address}/{token_id}/listings](https://docs.opensea.io/reference/asset-listings))
+* Asset offers ([/asset/{asset_contract_address}/{token_id}/offers](https://docs.opensea.io/reference/asset-offers))
 
 
 ## Prerequisite

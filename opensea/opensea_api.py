@@ -93,6 +93,7 @@ class OpenseaAPI:
         limit=None,
         occurred_before=None,
         occurred_after=None,
+        collection_editor=None,
         export_file_name="",
     ):
         """Fetches Events data from the API. Function arguments will be passed
@@ -128,6 +129,7 @@ class OpenseaAPI:
             "event_type": event_type,
             "only_opensea": only_opensea,
             "auction_type": auction_type,
+            "collection_editor": collection_editor,
             "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
         }
         if occurred_before is not None:

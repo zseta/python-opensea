@@ -92,6 +92,7 @@ class OpenseaAPI:
         auction_type=None,
         limit=None,
         occurred_before=None,
+        occurred_after=None,
         export_file_name="",
     ):
         """Fetches Events data from the API. Function arguments will be passed
@@ -113,7 +114,11 @@ class OpenseaAPI:
         """
         if occurred_before is not None and not isinstance(occurred_before,
                                                           datetime):
-            raise ValueError("occurred_before must be a datetime object")
+            raise ValueError("`occurred_before` must be a datetime object")
+
+        if occurred_after is not None and not isinstance(occurred_after,
+                                                         datetime):
+            raise ValueError("`occurred_after` must be a datetime object")
 
         query_params = {
             "asset_contract_address": asset_contract_address,
@@ -127,6 +132,9 @@ class OpenseaAPI:
         }
         if occurred_before is not None:
             query_params["occurred_before"] = occurred_before.timestamp()
+
+        if occurred_after is not None:
+            query_params["occurred_after"] = occurred_after.timestamp()
         return self._make_request("events", query_params, export_file_name)
 
     def events_backfill(self,

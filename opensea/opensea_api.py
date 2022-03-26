@@ -10,6 +10,7 @@ class OpenseaAPI:
     MAX_ASSET_ITEMS = 50
     MAX_COLLECTION_ITEMS = 300
     MAX_BUNDLE_ITEMS = 50
+    MAX_LISTINGS_LIMIT = 50
 
     def __init__(self, base_url="https://api.opensea.io/api", apikey=None,
                  version="v1"):
@@ -394,3 +395,22 @@ class OpenseaAPI:
             "offset": offset,
         }
         return self._make_request("bundles", query_params, export_file_name)
+    
+    def listings(self, asset_contract_address, token_id, limit=None,
+                 export_file_name=""):
+        """Fetches Listings data for an asset from the API. Function arguments
+        will be passed as API query parameters, without modification.
+
+        OpenSea API Listings query parameters:
+        https://docs.opensea.io/reference/asset-listings
+
+        There's one extra optional argument:
+        export_file_name (str, optional): Exports the JSON data into a the
+        specified file.
+
+        Returns:
+            [dict]: Bundles data
+        """
+        query_params = {"limit": self.MAX_LISTINGS_LIMIT if limit is None else limit}
+        endpoint = f"asset/{asset_contract_address}/{token_id}/listings"
+        return self._make_request(endpoint, query_params, export_file_name)

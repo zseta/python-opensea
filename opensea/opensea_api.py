@@ -107,7 +107,7 @@ class OpenseaAPI:
         to use datetime objects when calling this function.
 
         There's one extra optional argument:
-        export_file_name (str, optional): Exports the JSON data into a the
+        export_file_name (str, optional): Exports the JSON data into the
         specified file.
 
         Returns:

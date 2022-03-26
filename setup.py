@@ -55,6 +55,6 @@ setup(
         'Documentation': 'https://opensea-api.attilatoth.dev',
         'Source': 'https://github.com/zseta/python-opensea'
     },
-    version='0.1.6',
+    version='0.1.7',
     zip_safe=False,
 )

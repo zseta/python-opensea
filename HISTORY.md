@@ -1,5 +1,12 @@
 # History
 
+## 0.1.7 (2022-03-26)
+* Add support for [asset listings](https://docs.opensea.io/reference/asset-listings)
+    and [asset offers](https://docs.opensea.io/reference/asset-offers) endpoints
+* Add `occured_after` and `collection_editor` arguments to events endpoint
+* Handle SSL error when making requests
+* Docs: add example to paginate the events endpoint (using `events_backfill()`)
+
 ## 0.1.6 (2022-02-25)
 * Fix /events endpoint pagination (`events_backfill()` function) by
 passing only *the cursor hash* and not the full URL to the next request.

@@ -6,14 +6,14 @@ The library provides a simplified interface to fetch a diverse set of NFT data p
 ## Supported endpoints
 The wrapper covers the following OpenSea API endpoints:
 
-* [Single asset](#get-data-about-a-single-asset) ([/asset](https://docs.opensea.io/reference/retrieving-a-single-asset))
-* [Single asset contract](#get-data-about-a-single-asset-contract) ([/asset_contract](https://docs.opensea.io/reference/retrieving-a-single-contract))
-* [Single collection](#get-data-about-a-single-collection) ([/collection](https://docs.opensea.io/reference/retrieving-a-single-collection))
-* [Collection stats](#get-collection-stats) ([/collection/{slug}/stats](https://docs.opensea.io/reference/retrieving-collection-stats))
-* [Multiple assets](#get-data-about-multiple-assets) ([/assets](https://docs.opensea.io/reference/getting-assets))
-* [Multiple collections](#get-data-about-multiple-collections) ([/collections](https://docs.opensea.io/reference/retrieving-collections))
-* [Multiple events](#get-data-about-multiple-events) ([/events](https://docs.opensea.io/reference/retrieving-asset-events))
-* [Multiple bundles](#get-data-about-multiple-bundles) ([/bundles](https://docs.opensea.io/reference/retrieving-bundles))
+* Single asset ([/asset](https://docs.opensea.io/reference/retrieving-a-single-asset))
+* Single asset contract ([/asset_contract](https://docs.opensea.io/reference/retrieving-a-single-contract))
+* Single collection ([/collection](https://docs.opensea.io/reference/retrieving-a-single-collection))
+* Collection stats ([/collection/{slug}/stats](https://docs.opensea.io/reference/retrieving-collection-stats))
+* Multiple assets] ([/assets](https://docs.opensea.io/reference/getting-assets))
+* Multiple collections ([/collections](https://docs.opensea.io/reference/retrieving-collections))
+* Multiple events ([/events](https://docs.opensea.io/reference/retrieving-asset-events))
+* Multiple bundles ([/bundles](https://docs.opensea.io/reference/retrieving-bundles))
 
 
 ## Prerequisite
@@ -74,11 +74,24 @@ result = api.events(
 
 # fetch multiple bundles
 result = api.bundles(limit=2)
+
+# paginate the events endpoint (cursors are handled internally)
+from datetime import datetime, timezone
+
+start_at = datetime(2021, 10, 5, 3, 25, tzinfo=timezone.utc)
+finish_at = datetime(2021, 10, 5, 3, 20, tzinfo=timezone.utc)
+
+event_generator = api.events_backfill(start=start_from,
+                                      until=finish_at,
+                                      event_type="successful")
+for event in event_generator:
+    if event is not None:
+        print(event) # or do other things with the event data
 ```
 
 [Here's a demo video showcasing the basics.](https://www.youtube.com/watch?v=ga4hTqNRjfw)
 
 ## Documentation
-* [Wrapper documentation](https://opensea-api.attilatoth.dev) (work in progress)
+* [Wrapper documentation](https://opensea-api.attilatoth.dev)
 * [OpenSea API documentation](https://docs.opensea.io/reference/api-overview)
 

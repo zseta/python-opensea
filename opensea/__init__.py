@@ -2,7 +2,7 @@
 
 __author__ = """Attila Toth"""
 __email__ = "hello@attilatoth.dev"
-__version__ = '0.1.6'
+__version__ = '0.1.7'
 __all__ = ["Events", "Asset", "Assets", "Contract", "Collection",
            "CollectionStats", "Collections", "Bundles", "utils",
            "OpenseaAPI"]

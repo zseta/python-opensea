@@ -10,6 +10,8 @@ class OpenseaAPI:
     MAX_ASSET_ITEMS = 50
     MAX_COLLECTION_ITEMS = 300
     MAX_BUNDLE_ITEMS = 50
+    MAX_LISTING_ITEMS = 50
+    MAX_OFFER_ITEMS = 50
 
     def __init__(self, base_url="https://api.opensea.io/api", apikey=None,
                  version="v1"):
@@ -24,9 +26,8 @@ class OpenseaAPI:
         self.api_url = f"{base_url}/{version}"
         self.apikey = apikey
 
-    def _make_request(
-        self, endpoint=None, params=None, export_file_name="",
-        return_response=False):
+    def _make_request(self, endpoint=None, params=None, export_file_name="",
+                      return_response=False):
         """Makes a request to the OpenSea API and returns either a response
         object or dictionary.
 
@@ -58,8 +59,10 @@ class OpenseaAPI:
             depending on the `return_response` argument.
         """
         if endpoint is None:
-            raise ValueError("""You need to define an `endpoint` when
-                             making a request!""")
+            raise ValueError(
+                """You need to define an `endpoint` when
+                             making a request!"""
+            )
 
         headers = {"X-API-KEY": self.apikey}
         url = f"{self.api_url}/{endpoint}"
@@ -70,6 +73,8 @@ class OpenseaAPI:
             raise requests.exceptions.HTTPError(response.text)
         elif response.status_code == 403:
             raise ConnectionError("The server blocked access.")
+        elif response.status_code == 495:
+            raise requests.exceptions.SSLError("SSL certificate error")
         elif response.status_code == 504:
             raise TimeoutError("The server reported a gateway time-out error.")
 
@@ -90,6 +95,8 @@ class OpenseaAPI:
         auction_type=None,
         limit=None,
         occurred_before=None,
+        occurred_after=None,
+        collection_editor=None,
         export_file_name="",
     ):
         """Fetches Events data from the API. Function arguments will be passed
@@ -103,7 +110,7 @@ class OpenseaAPI:
         to use datetime objects when calling this function.
 
         There's one extra optional argument:
-        export_file_name (str, optional): Exports the JSON data into a the
+        export_file_name (str, optional): Exports the JSON data into the
         specified file.
 
         Returns:
@@ -111,7 +118,11 @@ class OpenseaAPI:
         """
         if occurred_before is not None and not isinstance(occurred_before,
                                                           datetime):
-            raise ValueError("occurred_before must be a datetime object")
+            raise ValueError("`occurred_before` must be a datetime object")
+
+        if occurred_after is not None and not isinstance(occurred_after,
+                                                         datetime):
+            raise ValueError("`occurred_after` must be a datetime object")
 
         query_params = {
             "asset_contract_address": asset_contract_address,
@@ -121,25 +132,31 @@ class OpenseaAPI:
             "event_type": event_type,
             "only_opensea": only_opensea,
             "auction_type": auction_type,
+            "collection_editor": collection_editor,
             "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
         }
         if occurred_before is not None:
             query_params["occurred_before"] = occurred_before.timestamp()
+
+        if occurred_after is not None:
+            query_params["occurred_after"] = occurred_after.timestamp()
         return self._make_request("events", query_params, export_file_name)
 
-    def events_backfill(self,
-                        start,
-                        until,
-                        rate_limiting=2,
-                        asset_contract_address=None,
-                        collection_slug=None,
-                        token_id=None,
-                        account_address=None,
-                        event_type=None,
-                        only_opensea=False,
-                        auction_type=None,
-                        limit=None
-                        ):
+    def events_backfill(
+        self,
+        start,
+        until,
+        rate_limiting=2,
+        asset_contract_address=None,
+        collection_slug=None,
+        token_id=None,
+        account_address=None,
+        event_type=None,
+        only_opensea=False,
+        auction_type=None,
+        limit=None,
+        collection_editor=None,
+    ):
         """
         EXPERIMENTAL FUNCTION!
 
@@ -172,8 +189,10 @@ class OpenseaAPI:
             raise ValueError("`until` and `start` must be datetime objects")
 
         if until > start:
-            raise ValueError("""`start` must be a later point in time
-                             than `until`""")
+            raise ValueError(
+                """`start` must be a later point in time
+                             than `until`"""
+            )
 
         query_params = {
             "asset_contract_address": asset_contract_address,
@@ -184,7 +203,8 @@ class OpenseaAPI:
             "only_opensea": only_opensea,
             "auction_type": auction_type,
             "limit": self.MAX_EVENT_ITEMS if limit is None else limit,
-            "occurred_before": start
+            "occurred_before": start,
+            "collection_editor": collection_editor,
         }
 
         # make the first request to get the `next` cursor has
@@ -380,3 +400,46 @@ class OpenseaAPI:
             "offset": offset,
         }
         return self._make_request("bundles", query_params, export_file_name)
+
+    def listings(
+        self, asset_contract_address, token_id, limit=None, export_file_name=""
+    ):
+        """Fetches Listings data for an asset from the API. Function arguments
+        will be passed as API query parameters, without modification.
+
+        OpenSea API Listings query parameters:
+        https://docs.opensea.io/reference/asset-listings
+
+        There's one extra optional argument:
+        export_file_name (str, optional): Exports the JSON data into a the
+        specified file.
+
+        Returns:
+            [dict]: Listings data
+        """
+        query_params = {
+            "limit": self.MAX_LISTING_ITEMS if limit is None else limit
+        }
+        endpoint = f"asset/{asset_contract_address}/{token_id}/listings"
+        return self._make_request(endpoint, query_params, export_file_name)
+
+    def offers(self, asset_contract_address, token_id, limit=None,
+               export_file_name=""):
+        """Fetches Offers data for an asset from the API. Function arguments
+        will be passed as API query parameters, without modification.
+
+        OpenSea API Listings query parameters:
+        https://docs.opensea.io/reference/asset-offers
+
+        There's one extra optional argument:
+        export_file_name (str, optional): Exports the JSON data into a the
+        specified file.
+
+        Returns:
+            [dict]: Offers data
+        """
+        query_params = {
+            "limit": self.MAX_OFFER_ITEMS if limit is None else limit
+        }
+        endpoint = f"asset/{asset_contract_address}/{token_id}/offers"
+        return self._make_request(endpoint, query_params, export_file_name)

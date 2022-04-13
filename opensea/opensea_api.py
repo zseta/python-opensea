@@ -211,7 +211,7 @@ class OpenseaAPI:
         first_request = self._make_request("events", query_params)
         yield first_request
         query_params["cursor"] = first_request["next"]
-
+        last_time = start
         # pagination
         while True:
             time.sleep(rate_limiting)
@@ -222,6 +222,10 @@ class OpenseaAPI:
 
             time_field = data["asset_events"][0]["created_date"]
             current_time = utils.str_to_datetime_utc(time_field)
+            if current_time <= last_time:
+                last_time = current_time
+            else:
+                break
             if current_time >= until:
                 yield data
             else:

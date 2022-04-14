@@ -162,7 +162,7 @@ class Assets(OpenseaBase):
     def fetch(
         self,
         owner=None,
-        token_ids=[],
+        token_ids=(),
         asset_contract_address=None,
         asset_contract_addresses=None,
         order_by=None,
@@ -170,6 +170,7 @@ class Assets(OpenseaBase):
         offset=None,
         limit=None,
         collection=None,
+        cursor=None,
         export_file_name="",
     ):
         """Fetches assets data from the API. Function arguments will be passed
@@ -195,6 +196,7 @@ class Assets(OpenseaBase):
             "offset": offset,
             "limit": self.MAX_API_ITEMS if limit is None else limit,
             "collection": collection,
+            "cursor": cursor
         }
         return super()._make_request(query_params, export_file_name)
 

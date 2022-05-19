@@ -1,5 +1,9 @@
 # History
 
+## 0.1.8 (2022-xx-xx)
+* Add `include_orders` in the assets api 
+* Add cursor-based pagination in `assets` endpoint
+
 ## 0.1.7 (2022-03-26)
 * Add support for [asset listings](https://docs.opensea.io/reference/asset-listings)
     and [asset offers](https://docs.opensea.io/reference/asset-offers) endpoints

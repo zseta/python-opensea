@@ -241,7 +241,7 @@ class OpenseaAPI:
         Args:
             OpenSea API Asset query parameters:
             https://docs.opensea.io/reference/retrieving-a-single-asset
-            
+
             Extra args:
             export_file_name (str, optional): Exports the JSON data into a the
             specified file.

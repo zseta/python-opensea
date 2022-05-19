@@ -278,7 +278,7 @@ class OpenseaAPI:
         page of assets, or all of them. If it's `True` it will use the
         cursor-based pagination provided by OpenSea. Defaults to False.
         rate_limiting (int, optional): Only relevant if pagination is `True`.
-        It applies a rate limitation in-between requests. Defaults to 2 seconds.
+        It applies a rate limitation in-between requests. Defaults to 2 sec.
         export_file_name (str, optional): Exports the JSON data into the
         specified file. If pagination is `True` this argument is ignored.
 
@@ -302,7 +302,7 @@ class OpenseaAPI:
             first_request = self._make_request("assets", query_params)
             yield first_request
             query_params["cursor"] = first_request.get("next")
-            
+
             # paginate
             while True:
                 time.sleep(rate_limiting)
@@ -311,7 +311,7 @@ class OpenseaAPI:
                     yield response
                     query_params["cursor"] = response.get("next")
                 else:
-                    break # stop pagination if there is no next page
+                    break  # stop pagination if there is no next page
         else:
             return self._make_request("assets", query_params, export_file_name)
 

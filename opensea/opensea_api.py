@@ -262,6 +262,7 @@ class OpenseaAPI:
         offset=None,
         limit=None,
         collection=None,
+        include_orders=False,
         export_file_name="",
     ):
         """Fetches assets data from the API. Function arguments will be passed
@@ -271,7 +272,7 @@ class OpenseaAPI:
         https://docs.opensea.io/reference/getting-assets
 
         There's one extra optional argument:
-        export_file_name (str, optional): Exports the JSON data into a the
+        export_file_name (str, optional): Exports the JSON data into the
         specified file.
 
         Returns:
@@ -287,6 +288,7 @@ class OpenseaAPI:
             "offset": offset,
             "limit": self.MAX_ASSET_ITEMS if limit is None else limit,
             "collection": collection,
+            "include_orders": include_orders
         }
         return self._make_request("assets", query_params, export_file_name)
 

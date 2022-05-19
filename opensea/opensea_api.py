@@ -233,14 +233,16 @@ class OpenseaAPI:
         asset_contract_address,
         token_id,
         account_address=None,
+        include_orders=False,
         export_file_name="",
     ):
         """Fetches Asset data from the API.
 
         Args:
-            asset_contract_address (str): Contract address of the NFT.
-            token_id (str): Token ID of the NFT.
-            account_address (str, optional). Defaults to None.
+            OpenSea API Asset query parameters:
+            https://docs.opensea.io/reference/retrieving-a-single-asset
+            
+            Extra args:
             export_file_name (str, optional): Exports the JSON data into a the
             specified file.
 
@@ -248,7 +250,8 @@ class OpenseaAPI:
             [dict]: Single asset data
         """
         endpoint = f"asset/{asset_contract_address}/{token_id}"
-        query_params = {"account_address": account_address}
+        query_params = {"account_address": account_address,
+                        "include_orders": include_orders}
         return self._make_request(endpoint, query_params, export_file_name)
 
     def assets(

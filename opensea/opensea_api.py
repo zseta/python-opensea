@@ -207,12 +207,12 @@ class OpenseaAPI:
             "collection_editor": collection_editor,
         }
 
-        # make the first request to get the `next` cursor has
+        # make the first request to get the `next` cursor value
         first_request = self._make_request("events", query_params)
         yield first_request
         query_params["cursor"] = first_request["next"]
 
-        # pagination
+        # paginate
         while True:
             time.sleep(rate_limiting)
             data = self._make_request("events", query_params)
@@ -263,6 +263,8 @@ class OpenseaAPI:
         limit=None,
         collection=None,
         include_orders=False,
+        pagination=False,
+        rate_limiting=2,
         export_file_name="",
     ):
         """Fetches assets data from the API. Function arguments will be passed
@@ -271,9 +273,14 @@ class OpenseaAPI:
         OpenSea API Assets query parameters:
         https://docs.opensea.io/reference/getting-assets
 
-        There's one extra optional argument:
+        There are extra optional arguments:
+        pagination (boolean, optional): Whether you want to get only the first
+        page of assets, or all of them. If it's `True` it will use the
+        cursor-based pagination provided by OpenSea. Defaults to False.
+        rate_limiting (int, optional): Only relevant if pagination is `True`.
+        It applies a rate limitation in-between requests. Defaults to 2 seconds.
         export_file_name (str, optional): Exports the JSON data into the
-        specified file.
+        specified file. If pagination is `True` this argument is ignored.
 
         Returns:
             [dict]: Assets data
@@ -290,7 +297,23 @@ class OpenseaAPI:
             "collection": collection,
             "include_orders": include_orders
         }
-        return self._make_request("assets", query_params, export_file_name)
+        if pagination:
+            # make the first request to get the `next` cursor value
+            first_request = self._make_request("assets", query_params)
+            yield first_request
+            query_params["cursor"] = first_request.get("next")
+            
+            # paginate
+            while True:
+                time.sleep(rate_limiting)
+                if query_params["cursor"] is not None:
+                    response = self._make_request("assets", query_params)
+                    yield response
+                    query_params["cursor"] = response.get("next")
+                else:
+                    break # stop pagination if there is no next page
+        else:
+            return self._make_request("assets", query_params, export_file_name)
 
     def contract(self, asset_contract_address, export_file_name=""):
         """Fetches asset contract data from the API.
